@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
-from chatterbot.trainers import ListTrainer
+
 from DBE_Chatbot import run
 app = Flask(__name__)
 
