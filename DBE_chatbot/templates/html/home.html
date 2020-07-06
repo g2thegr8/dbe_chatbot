@@ -1,0 +1,92 @@
+<html>
+	<head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="shortcut icon" href="{{url_for('static', filename='here.ico') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/dbe_chatbot.css') }}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script>
+        $(document).ready(function() {
+   $('[data-toggle="popover"]').popover({
+      placement: 'bottom',
+      trigger: 'hover'
+   });
+});
+</script>
+	</head>
+	<title>DBE_Chatbot</title>
+	<body>
+		<!-- Header -->
+		<div class="box1"></div>
+		<h1>
+			<a href="https://www.here.com/" target="_blank" title="https://www.here.com/">
+				<img
+					src="/static/HERE_logo_white.png"
+					alt="DBE_Chatbot"
+					style="width:60px;height:55px;float:left;margin:0 60px 0 20px;"
+				/>
+			</a>DBE ChatBot
+		</h1>
+		<div class="box2"></div>
+		<!-- Help button -->
+		<span title="Go to map">
+   <button type="button" id ="helpbut" style="background-color:transparent;border-color:transparent;" data-toggle="popover" title="Modal Short Text" data-content="You gotta go through it to see there ain't nothing to it. Listen to the silence."><img
+                    src="{{url_for('static', filename='help.svg') }}"
+                    width=40px;
+                    height=40px;
+				/></button>
+		</span>
+		<!-- Header -->
+		<div class="boxed">
+				<div id="chatbox">
+					<p class="botText">
+						<span title="DBE Chatbot">Hi! I'm your DBE ChatBot</span>
+					</p>
+					<p class="botText">
+						<span title="DBE Chatbot">How can I help you?</span>
+					</p>
+				</div>
+				<center>
+					<div  id="userInput">
+						<input id="textInput" type="text" name="msg" placeholder="Type your message">
+						<input readonly id="sendbut" title="Send message" onclick="getBotResponse()">
+						<div class="box3"></div>
+					</div>
+				</center>
+		</div>
+		<!-- Script to add text -->
+		<script>
+			function getBotResponse() {
+				var rawText = $("#textInput").val();
+				if (rawText.length > 0) {
+					var userHtml = '<p class="userText"><span title="You">' + rawText + "</span></p>";
+					$("#textInput").val("");
+					$("#chatbox").append(userHtml);
+					document
+						.getElementById("userInput")
+						.scrollIntoView({ block: "start", behavior: "smooth" });
+					$.get("/get", { msg: rawText }).done(function(data) {
+						var botHtml = '<p class="botText"><span  title="DBE Chatbot">' + data + "</span></p>";
+							$("#chatbox").append(botHtml);
+							document
+								.getElementById("userInput")
+								.scrollIntoView({ block: "start", behavior: "smooth" });
+							//Scroll down automatically
+							$("#chatbox").scrollTop(999999999);
+					});
+				}
+				//Get focus after sending the message
+				$("#textInput").focus();
+				//Scroll down automatically
+				$("#chatbox").scrollTop(999999999);
+			}
+			$("#textInput").keypress(function(e) {
+				if (e.which == 13) {
+					getBotResponse();
+				}
+			});
+		</script>
+	</body>
+</html>
